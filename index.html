@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Hard Core Website</title>
+    <title>Home | Kevin Cottington</title>
 
     <!--<link rel="icon" type="img/ico" href="./favicon.ico">-->
 
@@ -58,7 +58,7 @@
             <h1 class="cover-heading">The Personal Page of Kevin Cottington</h1>
             <p class="lead">Guess what happens when you click this button</p>
             <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">Learn more</a>
+              <a href="#" id="funky-button" class="btn btn-lg btn-default">Learn more</a>
             </p>
           </div>
 
@@ -84,3 +84,8 @@
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
+<script>
+    $('#funky-button').on('click', () => {
+        $('#funky-button').text(Math.random());
+    });
+</script>
