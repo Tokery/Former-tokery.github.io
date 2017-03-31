@@ -117,6 +117,12 @@ body {
   font-weight: bold;
 }
 
+/*
+ * Main media
+ */
+.main {
+  padding-top: 15px;
+}
 
 /*
  * Footer
