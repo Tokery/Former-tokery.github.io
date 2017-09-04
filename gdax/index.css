@@ -1,0 +1,11 @@
+body {
+    padding: 20px
+}
+
+#priceup {
+    color: #05DD05
+}
+
+#pricedown {
+    color: #ff0000
+}
