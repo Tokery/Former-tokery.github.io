@@ -99,14 +99,8 @@ window.onload = function() {
         var data = JSON.parse(msg.data);
         //console.log(data);
         if (data.type == "received") {
+            // Move to separate function
             actionsSeen += 1;
-
-            // Clear volume every 500 actions
-            if (actionsSeen == 500) {
-                sellVolume = 0;
-                buyVolume = 0;
-                actionsSeen = 0;
-            }
 
             if (data.side == "sell") {
                 container.uniqueSells += 1;
@@ -132,6 +126,21 @@ window.onload = function() {
                 container.dir = 'priceup';
             }
             oldPrice = data.price;
+        }
+        else if (data.type == "done") {
+            if (data.reason = "canceled") {
+                if (data.side == "sell") {
+                    sellVolume -= data.remaining_size ? Number(data.remaining_size) : 0;
+                    console.log('Sell cancel');
+                    container.sellVol = sellVolume;
+                }
+                else if (data.side == "buy") {
+                    buyVolume -= data.remaining_size ? Number(data.remaining_size) : 0;
+                    console.log('Buy cancel');
+                    container.buyVol =  buyVolume;
+                }
+                console.log(data.remaining_size);
+            }
         }
     }
 }
