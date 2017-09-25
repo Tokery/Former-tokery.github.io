@@ -11,20 +11,21 @@ var getRestData = function () {
     })
 }
 
-// Match the live data to the data from the api
-var matchLiveData = function () {
+// TODO: Do basic analysis. How? Well...
+/**
+ * Calculate average sell volume over the past half hour
+ * Calculate standard deviation
+ * If outside, something is up
+ */
 
-}
 
 window.onload = function() {
-    var sellVolume = 0;
-    var buyVolume = 0;
     var actionsSeen = 0;
     var oldPrice = 0;
 
     var socket;
     var container = new Vue({
-        el: '#container',
+        el: '#wrapper',
         data: {
             sellOrder: 'Sell Data...',
             buyOrder: 'Buy Data...',
@@ -36,7 +37,10 @@ window.onload = function() {
             uniqueBuys: 0,
             uniqueSells: 0,
             status: 'Starting...',
-            dir: 'priceup'
+            dir: 'priceup',
+            accountBalance: 100000,
+            netTokensHeld: 0,
+            coinsOwned: {}
         },
         methods: {
             checkWebsocket: function() {
@@ -84,12 +88,34 @@ window.onload = function() {
             resetNumbers() {
                 this.sellVol = 0;
                 this.buyVol = 0;
-                sellVolume = 0;
-                buyVolume = 0;
                 this.marketSell = 0;
                 this.marketBuy = 0;
                 this.uniqueSells = 0;
                 this.uniqueBuys = 0;
+            },
+            performTrade(type) {
+                // TODO: Convert accountBalance to current profit
+                var newCoin = {};
+                if (type === 'buy') {
+                    this.accountBalance -= oldPrice;
+                    this.netTokensHeld += 1;
+                    if (oldPrice in this.coinsOwned) {
+                        this.coinsOwned[oldPrice] += 1;
+                    }
+                    else {
+                        this.coinsOwned[oldPrice] = 1;
+                    }
+                }
+                else {
+                    if (oldPrice in this.coinsOwned) {
+                        this.coinsOwned[oldPrice] -= 1;
+                    }
+                    else {
+                        this.coinsOwned[oldPrice] = -1;
+                    }
+                    this.netTokensHeld -= 1;
+                    this.accountBalance += Number(oldPrice);
+                }
             }
         }
     })
@@ -104,21 +130,19 @@ window.onload = function() {
 
             if (data.side == "sell") {
                 container.uniqueSells += 1;
-                sellVolume += data.size ? Number(data.size) : 0;
+                container.sellVol += data.size ? Number(data.size) : 0;
                 container.sellOrder = 'Received: ' + data.order_type + ' @ ' + data.price;        
                 container.marketSell += data.price ? 0 : 1; // Increment if no price (market sell)        
-                container.sellVol = sellVolume;
             }
             else if (data.side == "buy") {
                 container.uniqueBuys += 1;
-                buyVolume += data.size ? Number(data.size) : 0;
+                container.buyVol += data.size ? Number(data.size) : 0;
                 container.buyOrder = 'Received: ' + data.order_type + ' @ ' + data.price;                
                 container.marketBuy += data.price ? 0 : 1;
-                container.buyVol = buyVolume;
             }
         }
         else if (data.type == "match") {
-            container.lastPrice = data.price + ' ' + ((data.price - oldPrice) / oldPrice * 100).toFixed(3) + '%';
+            container.lastPrice = '$' + data.price + ' ' + ((data.price - oldPrice) / oldPrice * 100).toFixed(3) + '%';
             if (data.price < oldPrice) {
                 container.dir = 'pricedown';
             }
@@ -130,16 +154,11 @@ window.onload = function() {
         else if (data.type == "done") {
             if (data.reason = "canceled") {
                 if (data.side == "sell") {
-                    sellVolume -= data.remaining_size ? Number(data.remaining_size) : 0;
-                    console.log('Sell cancel');
-                    container.sellVol = sellVolume;
+                    container.sellVol -= data.remaining_size ? Number(data.remaining_size) : 0;
                 }
                 else if (data.side == "buy") {
-                    buyVolume -= data.remaining_size ? Number(data.remaining_size) : 0;
-                    console.log('Buy cancel');
-                    container.buyVol =  buyVolume;
+                    container.buyVol -= data.remaining_size ? Number(data.remaining_size) : 0;
                 }
-                console.log(data.remaining_size);
             }
         }
     }
