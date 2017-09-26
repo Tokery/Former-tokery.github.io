@@ -11,6 +11,7 @@ var getRestData = function () {
     })
 }
 
+// TODO: Create an order book
 // TODO: Do basic analysis. How? Well...
 /**
  * Calculate average sell volume over the past half hour
@@ -25,7 +26,7 @@ window.onload = function() {
 
     var socket;
     var container = new Vue({
-        el: '#wrapper',
+        el: '#container',
         data: {
             sellOrder: 'Sell Data...',
             buyOrder: 'Buy Data...',
@@ -40,7 +41,8 @@ window.onload = function() {
             dir: 'priceup',
             accountBalance: 100000,
             netTokensHeld: 0,
-            coinsOwned: {}
+            coinsOwned: {},
+            orderBook: {}
         },
         methods: {
             checkWebsocket: function() {
@@ -150,6 +152,7 @@ window.onload = function() {
                 container.dir = 'priceup';
             }
             oldPrice = data.price;
+            addData(oldPrice);
         }
         else if (data.type == "done") {
             if (data.reason = "canceled") {
