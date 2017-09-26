@@ -35,12 +35,12 @@
           <div :id="dir">{{ lastPrice }}</div> 
         </div>
         <br>
-        <button v-on:click="sendMessage">Send WS message</button>
-        <button v-on:click="closeConnection">Close Connection</button>
-        <button v-on:click="resetNumbers">Reset cumulatives</button>
-        <div>
-            <button v-on:click="performTrade('buy')">Buy</button>
-            <button v-on:click="performTrade('sell')">Sell</button>
+        <button class="btn btn-primary" v-on:click="sendMessage">Send WS message</button>
+        <button class="btn btn-warning" v-on:click="closeConnection">Close Connection</button>
+        <button class="btn btn-info" v-on:click="resetNumbers">Reset cumulatives</button>
+        <div style="margin-top:10px">
+            <button class="btn btn-success" v-on:click="performTrade('buy')">Buy</button>
+            <button class="btn btn-danger" v-on:click="performTrade('sell')">Sell</button>
             <span>Your account balance: ${{ accountBalance }}. Total tokens: {{ netTokensHeld }}</span>
           </div>
           <div>
