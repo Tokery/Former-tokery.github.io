@@ -47,7 +47,7 @@
               <nav>
                 <ul class="nav masthead-nav">
                   <li class="active"><a href="#">Home</a></li>
-                  <li><a href="./academics.html">Past Courses</a></li>
+                  <li><a href="./academics.html">Academics</a></li>
                   <li><a href="./projects.html">Projects</a></li>
                   <li><a href="./words.html">Random Words</a></li>
                 </ul>
@@ -57,10 +57,10 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">Computing and Financial Management student at Waterloo</h1>
-            <p class="lead">Click the button to learn a random fact</p>
+            <p class="lead">Click the button below to learn more about CFM</p>
             <p class="lead">
-              <a href="#" id="funky-button" class="btn btn-lg btn-default">
-                I need a random fact
+              <a href="./academics.html" id="funky-button" class="btn btn-lg btn-default">
+                What is CFM?
               </a>
             </p>
           </div>
@@ -88,7 +88,12 @@
   </body>
 </html>
 <script>
-    $('#funky-button').on('click', () => {
-        $('#funky-button').text('Fact: You are too curious');
+    $('#funky-button').hover(() => {
+        $('#funky-button').text('')
+        .append('<img src="./parrot.gif"/>')
+        .button();
+    },
+    () => {
+      $('#funky-button').text('What is CFM?');
     });
 </script>
