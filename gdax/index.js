@@ -83,6 +83,7 @@ window.onload = function() {
                     ]
                 }
                 socket.send(JSON.stringify(data));
+                container.scheduledUpdateChart();
             },
             closeConnection() {
                 socket.close();
@@ -94,6 +95,11 @@ window.onload = function() {
                 this.marketBuy = 0;
                 this.uniqueSells = 0;
                 this.uniqueBuys = 0;
+            },
+            scheduledUpdateChart() {
+                setInterval(() => {
+                    updateChart(oldPrice)
+                }, 5000);
             },
             performTrade(type) {
                 // TODO: Convert accountBalance to current profit
@@ -126,6 +132,7 @@ window.onload = function() {
     socket.onmessage = function(msg) {
         var data = JSON.parse(msg.data);
         //console.log(data);
+        
         if (data.type == "received") {
             // Move to separate function
             actionsSeen += 1;
@@ -152,7 +159,6 @@ window.onload = function() {
                 container.dir = 'priceup';
             }
             oldPrice = data.price;
-            addData(oldPrice);
         }
         else if (data.type == "done") {
             if (data.reason = "canceled") {

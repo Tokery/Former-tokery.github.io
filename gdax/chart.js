@@ -21,10 +21,12 @@ var myChart = new Chart(ctx, {
     }
 });
 
-function addData(data) {
-    myChart.data.labels.push(new Date().toLocaleTimeString());
-    myChart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
-    myChart.update();
+function updateChart(data) {
+    if (data !== 0) {
+        myChart.data.labels.push(new Date().toLocaleTimeString());
+        myChart.data.datasets.forEach((dataset) => {
+            dataset.data.push(data);
+        });
+        myChart.update();
+    }
 }
