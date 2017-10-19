@@ -42,12 +42,15 @@
             <button class="btn btn-success" v-on:click="performTrade('buy')">Buy</button>
             <button class="btn btn-danger" v-on:click="performTrade('sell')">Sell</button>
             <span>Your account balance: ${{ accountBalance }}. Total tokens: {{ netTokensHeld }}</span>
+        </div>
+        <div>
+          <div v-for="(price, quantity) in coinsOwned">
+            {{ quantity }} @ {{ price }}
           </div>
-          <div>
-            <div v-for="(price, quantity) in coinsOwned">
-              {{ quantity }} @ {{ price }}
-            </div>
-          </div>
+        </div>
+        <div>
+          <demo-grid :data="gridData" :columns="gridColumns" :filter-key="searchQuery"></demo-grid>
+        </div>
       </div>
       <div class="col-md-6">
         Chart Below
@@ -61,5 +64,30 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
   <script src="./chart.js"></script>
+  <script src="./grid-component/grid-component.js"></script>
 </body>
 </html>
+
+<!-- component template -->
+<script type="text/x-template" id="grid-template">
+  <table>
+    <thead>
+      <tr>
+        <th v-for="key in columns"
+          @click="sortBy(key)"
+          :class="{ active: sortKey == key }">
+          {{ key | capitalize }}
+          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="entry in filteredData">
+        <td v-for="key in columns">
+          {{entry[key]}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>
