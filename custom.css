@@ -1,5 +1,6 @@
 .courses {
     padding-top: 90px;
+    height: 100%;
 }
 
 .termHeader {
@@ -10,4 +11,10 @@
 
 .academics-header {
     text-align: left;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
